@@ -1,5 +1,4 @@
 resource "helm_release" "argocd" {
-  depends_on = [module.eks]
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
@@ -35,7 +34,6 @@ resource "helm_release" "argocd" {
 }
 
 resource "kubernetes_manifest" "argocd_root_app" {
-  depends_on = [module.eks]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind = "Application"
@@ -65,7 +63,6 @@ resource "kubernetes_manifest" "argocd_root_app" {
 }
 
 data "kubernetes_service" "argocd_server" {
-  depends_on = [module.eks]
   metadata {
     name      = "argocd-server"
     namespace = helm_release.argocd.namespace

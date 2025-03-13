@@ -1,14 +1,11 @@
-data "aws_availability_zones" "available" {
-  state = "available"
+module "eks" {
+  source = "./eks"
+  account_id = var.account_id
+  project_name = var.project_name
+  environment = var.environment
 }
 
-locals {
-  env_name = "${var.project_name}-${var.environment}-${replace(var.eks.cluster_version, ".", "-")}"
-  azs      = slice(data.aws_availability_zones.available.names, 0, 2)
-
-  tags = {
-    Project     = var.project_name
-    Environment = var.environment
-    Terraform   = "true"
-  }
+module "argo_cd" {
+  depends_on = [module.eks]
+  source = "./argocd"
 }

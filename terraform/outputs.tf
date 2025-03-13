@@ -3,7 +3,7 @@ output "eks_connect" {
 }
 
 output "argocd_server_load_balancer" {
-  value = data.kubernetes_service.argocd_server.status[0].load_balancer[0].ingress[0].hostname
+  value = module.argo_cd.argocd_server_load_balancer
 }
 
 output "argocd_initial_admin_secret" {

@@ -9,20 +9,6 @@ service:
   type: LoadBalancer
   port: 9898
 
-ingress:
-  enabled: true
-  className: "nlb"
-  annotations:
-    alb.ingress.kubernetes.io/scheme: "internet-facing"
-    alb.ingress.kubernetes.io/target-type: "ip"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/success-codes: "200-399"
-  hosts:
-    - host: ""
-      paths:
-        - path: /
-          pathType: Prefix
-
 ui:
   message: "Hello, World!"
   color: "blue"
