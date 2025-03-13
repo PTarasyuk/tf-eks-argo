@@ -12,6 +12,7 @@ ui:
 service:
   type: LoadBalancer
   port: 80
+  targetPort: 9898
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 

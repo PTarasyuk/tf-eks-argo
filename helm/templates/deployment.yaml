@@ -31,5 +31,5 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port | default 9898 }}
+              containerPort: {{ .Values.service.targetPort | default 9898 }}
               protocol: TCP
