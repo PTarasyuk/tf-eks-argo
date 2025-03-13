@@ -1,0 +1,18 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/stefanprodan/podinfo
+  tag: "6.5.0"
+  pullPolicy: IfNotPresent
+
+ui:
+  color: "#ffffff"
+  message: "Hello from podinfo"
+
+service:
+  type: LoadBalancer
+  port: 9898
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+
+resources: {}

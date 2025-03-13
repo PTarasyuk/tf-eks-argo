@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: podinfo2
+  namespace: argocd
+spec:
+  project: default
+  source:
+    path: "helm"
+    repoURL: "https://github.com/PTarasyuk/tf-eks-argo"
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - values.yaml
+      parameters:
+      - name: "image.tag"
+        value: 6.5.2
+      - name: "ui.message"
+        value: "Hello from PODINFO #2"
+      - name: "ui.color"
+        value: "#ff7c34"
+  destination:
+    name: in-cluster
+    namespace: podinfo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true         
