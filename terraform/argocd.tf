@@ -34,6 +34,33 @@ resource "helm_release" "argocd" {
   
 }
 
+resource "kubernetes_manifest" "argocd_root_app" {
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind = "Application"
+    metadata = {
+      spec = {
+        destination = {
+          name = "in-cluster"
+          namespace = "argocd"
+        }
+        source = {
+          path = "argocd/apps"
+          repoURL = "https://github.com/PTarasyuk/tf-eks-argo"
+          targetRevision = "HEAD"
+        }
+        project = "default"
+        syncPolicy = {
+          automated = {
+            prune = true
+            selfHeal = true
+          }
+        }
+      }
+    }
+  }
+}
+
 data "kubernetes_service" "argocd_server" {
  metadata {
    name      = "argocd-server"
