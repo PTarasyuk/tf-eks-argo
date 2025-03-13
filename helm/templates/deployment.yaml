@@ -17,6 +17,8 @@ spec:
       containers:
         - name: podinfo
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
           command:
           - ./podinfo
           - --port={{ .Values.service.port | default 9898 }}
@@ -29,7 +31,3 @@ spec:
           - name: PODINFO_UI_COLOR
             value: {{ quote .Values.ui.color }}
           {{- end }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.service.port | default 9898 }}
-              protocol: TCP

@@ -1,18 +1,29 @@
-replicaCount: 1
+replicaCount: 2
 
 image:
-  repository: ghcr.io/stefanprodan/podinfo
-  tag: "6.5.0"
+  repository: stefanprodan/podinfo
+  tag: "6.5.3"
   pullPolicy: IfNotPresent
-
-ui:
-  color: "#ffffff"
-  message: "Hello from podinfo"
 
 service:
   type: LoadBalancer
   port: 9898
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 
-resources: {}
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: "/healthz"
+    alb.ingress.kubernetes.io/success-codes: "200-399"
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+
+ui:
+  message: "Hello, World!"
+  color: "blue"
