@@ -35,26 +35,29 @@ resource "helm_release" "argocd" {
 }
 
 resource "kubernetes_manifest" "argocd_root_app" {
+  depends_on = [module.eks]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind = "Application"
     metadata = {
-      spec = {
-        destination = {
-          name = "in-cluster"
-          namespace = "argocd"
-        }
-        source = {
-          path = "argocd/apps"
-          repoURL = "https://github.com/PTarasyuk/tf-eks-argo"
-          targetRevision = "HEAD"
-        }
-        project = "default"
-        syncPolicy = {
-          automated = {
-            prune = true
-            selfHeal = true
-          }
+      name = "podinfo-root"
+      namespace = "argocd"
+    }
+    spec = {
+      destination = {
+        name = "in-cluster"
+        namespace = "argocd"
+      }
+      source = {
+        path = "argocd"
+        repoURL = "https://github.com/PTarasyuk/tf-eks-argo"
+        targetRevision = "HEAD"
+      }
+      project = "default"
+      syncPolicy = {
+        automated = {
+          prune = true
+          selfHeal = true
         }
       }
     }
@@ -62,8 +65,9 @@ resource "kubernetes_manifest" "argocd_root_app" {
 }
 
 data "kubernetes_service" "argocd_server" {
- metadata {
-   name      = "argocd-server"
-   namespace = helm_release.argocd.namespace
- }
+  depends_on = [module.eks]
+  metadata {
+    name      = "argocd-server"
+    namespace = helm_release.argocd.namespace
+  }
 }
